@@ -1,0 +1,163 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="bilgimYokModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+  <EntityContainer Name="bilgimYokModelStoreContainer">
+    <EntitySet Name="gazete" EntityType="bilgimYokModel.Store.gazete" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="haber" EntityType="bilgimYokModel.Store.haber" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="kategori" EntityType="bilgimYokModel.Store.kategori" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="kaynak" EntityType="bilgimYokModel.Store.kaynak" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="log" EntityType="bilgimYokModel.Store.log" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="sysdiagrams" EntityType="bilgimYokModel.Store.sysdiagrams" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="FK_haber_kaynak" Association="bilgimYokModel.Store.FK_haber_kaynak">
+      <End Role="kaynak" EntitySet="kaynak" />
+      <End Role="haber" EntitySet="haber" />
+    </AssociationSet>
+    <AssociationSet Name="FK_kaynak_gazete" Association="bilgimYokModel.Store.FK_kaynak_gazete">
+      <End Role="gazete" EntitySet="gazete" />
+      <End Role="kaynak" EntitySet="kaynak" />
+    </AssociationSet>
+    <AssociationSet Name="FK_kaynak_kategori" Association="bilgimYokModel.Store.FK_kaynak_kategori">
+      <End Role="kategori" EntitySet="kategori" />
+      <End Role="kaynak" EntitySet="kaynak" />
+    </AssociationSet>
+    <AssociationSet Name="FK_log_haber" Association="bilgimYokModel.Store.FK_log_haber">
+      <End Role="haber" EntitySet="haber" />
+      <End Role="log" EntitySet="log" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="gazete">
+    <Key>
+      <PropertyRef Name="gazete_id" />
+    </Key>
+    <Property Name="gazete_id" Type="int" Nullable="false" />
+    <Property Name="gazete_ismi" Type="nvarchar" Nullable="false" MaxLength="50" />
+    <Property Name="gazete_logo" Type="nvarchar" Nullable="false" MaxLength="500" />
+  </EntityType>
+  <EntityType Name="haber">
+    <Key>
+      <PropertyRef Name="haber_id" />
+    </Key>
+    <Property Name="haber_id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="kaynak_id" Type="int" />
+    <Property Name="haber_resim" Type="nvarchar" Nullable="false" MaxLength="500" />
+    <Property Name="haber_basligi" Type="nvarchar" Nullable="false" MaxLength="500" />
+    <Property Name="haber_icerigi" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="haber_link" Type="nvarchar" Nullable="false" MaxLength="250" />
+    <Property Name="haber_tiklanma" Type="int" />
+    <Property Name="ekleme_tarihi" Type="datetime" />
+  </EntityType>
+  <EntityType Name="kategori">
+    <Key>
+      <PropertyRef Name="kategori_id" />
+    </Key>
+    <Property Name="kategori_id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="kategori_ismi" Type="nvarchar" Nullable="false" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="kaynak">
+    <Key>
+      <PropertyRef Name="kaynak_id" />
+    </Key>
+    <Property Name="kaynak_id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="gazete_id" Type="int" />
+    <Property Name="kategori_id" Type="int" />
+    <Property Name="rss_link" Type="nvarchar" MaxLength="250" />
+  </EntityType>
+  <EntityType Name="log">
+    <Key>
+      <PropertyRef Name="log_id" />
+    </Key>
+    <Property Name="log_id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="ip_adresi" Type="nvarchar" MaxLength="50" />
+    <Property Name="browser_adi" Type="nvarchar" MaxLength="50" />
+    <Property Name="haber_id" Type="int" />
+    <Property Name="tiklama_zamani" Type="datetime" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="nvarchar" Nullable="false" MaxLength="128" />
+    <Property Name="principal_id" Type="int" Nullable="false" />
+    <Property Name="diagram_id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="int" />
+    <Property Name="definition" Type="varbinary(max)" />
+  </EntityType>
+  <Association Name="FK_haber_kaynak">
+    <End Role="kaynak" Type="bilgimYokModel.Store.kaynak" Multiplicity="0..1" />
+    <End Role="haber" Type="bilgimYokModel.Store.haber" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="kaynak">
+        <PropertyRef Name="kaynak_id" />
+      </Principal>
+      <Dependent Role="haber">
+        <PropertyRef Name="kaynak_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_kaynak_gazete">
+    <End Role="gazete" Type="bilgimYokModel.Store.gazete" Multiplicity="0..1" />
+    <End Role="kaynak" Type="bilgimYokModel.Store.kaynak" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="gazete">
+        <PropertyRef Name="gazete_id" />
+      </Principal>
+      <Dependent Role="kaynak">
+        <PropertyRef Name="gazete_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_kaynak_kategori">
+    <End Role="kategori" Type="bilgimYokModel.Store.kategori" Multiplicity="0..1" />
+    <End Role="kaynak" Type="bilgimYokModel.Store.kaynak" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="kategori">
+        <PropertyRef Name="kategori_id" />
+      </Principal>
+      <Dependent Role="kaynak">
+        <PropertyRef Name="kategori_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_log_haber">
+    <End Role="haber" Type="bilgimYokModel.Store.haber" Multiplicity="0..1" />
+    <End Role="log" Type="bilgimYokModel.Store.log" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="haber">
+        <PropertyRef Name="haber_id" />
+      </Principal>
+      <Dependent Role="log">
+        <PropertyRef Name="haber_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Function Name="fn_diagramobjects" ReturnType="int" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_alterdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+    <Parameter Name="version" Type="int" Mode="In" />
+    <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+  </Function>
+  <Function Name="sp_creatediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+    <Parameter Name="version" Type="int" Mode="In" />
+    <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+  </Function>
+  <Function Name="sp_dropdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_helpdiagramdefinition" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_helpdiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_renamediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+    <Parameter Name="new_diagramname" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="sp_upgraddiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+</Schema>
