@@ -12,7 +12,17 @@ input, textarea, select{font-size:12px; font-family:Georgia, "Times New Roman", 
 
 /* ----------------------------------------------Search Form-------------------------------------*/
 
-
+#topbar input{
+	display:block;
+	float:left;
+	width:155px;
+	margin:0 5px 0 0;
+	padding:5px;
+	color:#B6B6B6;
+	background-color:#525252;
+	border:1px solid #343434;
+	font-size:12px;
+	}
 
 #topbar input#go{
 	width:68px;
